@@ -66,7 +66,11 @@ static void CallJs(napi_env env, napi_value js_cb, void* context, void *data) {
     
     napi_value argv[] = {value, cb};
     status = napi_call_function(env, undefined, js_cb, 2, argv, nil);
-    assert(status == napi_ok);
+    if (status != napi_ok) {
+        NSLog(@"Failed to call function: %d", status);
+        napi_throw_error(env, NULL, "Failed to call JavaScript function");
+        return;
+    }
 }
 
 static napi_value
